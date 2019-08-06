@@ -1,0 +1,7 @@
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"SM4sbox.d" -MT"SM4sbox.o" -o "SM4sbox.o" "SM4sbox.c"
+
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "main.c"
+
+gcc  -o "main"  SM4sbox.o main.o
+
+rm *.o *.d

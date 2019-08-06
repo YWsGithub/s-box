@@ -1,0 +1,90 @@
+#include "SM4sbox.h"
+
+/*q, r, w are used to record the result of inverse for doing inverse_inv*/
+
+int multiplication(int a,int b){
+	 int tem=0;
+	 int i=0;
+	 while(b){
+		 if(b&1){
+			 tem^=a<<i;
+		 }
+		 i++;
+		 b>>=1;
+	 }
+	 return tem;
+}
+
+int length(int x){
+	 int i=0;
+	 int comp=1;
+	 while(1){
+		 if(comp>=x) return i;
+
+		 comp=(comp<<1)+1;
+		 i++;
+	 }
+}
+
+// do the polynomial division of a and b (a/b), then store Quotient q to *round, Remainder p to *left
+void division(int a,int b,int* round,int* left){
+	*round=0;
+	*left=0;
+	int distance;
+	while(1){
+		distance=length(a)-length(b);
+		if(distance>=0 && a){
+			a=a ^ (b<<distance);
+			*round=(*round) | (1<<distance);
+		}else{
+			*left=a;
+			break;
+		}
+	}
+}
+
+/* SM4 : a = 0x1f5, AES : a = 0x11b*/
+int inverse(int a,int b){
+
+	int wtmp0 = 0;
+	int wtmp1 = 1;
+	int qtmp,rtmp;
+
+	while(b){
+		 int wtmp2;
+		 division(a,b,&qtmp,&rtmp);
+
+		 wtmp2 = wtmp0 ^ multiplication(qtmp, wtmp1);
+
+		 a = b;
+		 b = rtmp;
+
+		 wtmp0 = wtmp1;
+		 wtmp1 = wtmp2;
+	 }
+	 return wtmp0;
+}
+
+/* SM4 : A1 = 0xa7, C1 = 0Xd3, AES : A1 = 0xf1, C1 = 0x63*/
+int affine(int A1, int x, int C1){
+	 int flag;
+	 int result=0;
+	 int tem;
+	 int flag2;
+
+	 for(int i=0;i<8;i++){
+		 flag=(A1 & 0x80)>>7;
+		 tem=x & A1;
+		 flag2=0;
+		 for(int j=0;j<8;j++){
+			 flag2^=(tem & 1);
+			 tem>>=1;
+		 }
+		 result=result | (flag2<<i);
+		 A1=(A1<<1) | flag;
+	 }
+	 result ^= C1;
+
+	 return result;
+}
+
