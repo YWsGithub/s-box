@@ -1,0 +1,5 @@
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "main.c"
+
+gcc  -o "main"  ./main.o
+
+rm *.o *.d 
