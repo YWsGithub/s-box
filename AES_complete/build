@@ -1,0 +1,7 @@
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"aes.d" -MT"aes.o" -o "aes.o" "aes.c"
+
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "main.c"
+
+gcc  -o "main"  ./aes.o ./main.o
+
+rm *.d *.o  
