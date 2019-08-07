@@ -1,0 +1,7 @@
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "main.c"
+
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"sm4.d" -MT"sm4.o" -o "sm4.o" "sm4.c"
+
+gcc  -o "main"  ./main.o ./sm4.o
+
+rm *.o *.d
